@@ -1,0 +1,17 @@
+
+
+1 create user venum with home dir 
+2. create group 'systemgroup'
+3. Add venum user to system group.
+4. Add system gruop to the sudeors file.
+5. verify if venum user is able to use Sudo su
+--------- if not display (troubleshoot)
+
+6.Create 2 users in 2 different servers.
+7.configure the passwordless authentication between those 2 servers withing that users. 
+8.install lynx package both in ubuntu and centos 
+9.command to check the 5 top pprocesses that consuming memory and cpu 
+10.Install the httpd package in centos 7 and enable the service on reboot also write simple text in /var/www/html
+11. create a folder and set the Read Only permission using Access Contl List(acl) on that folder for venum user.
+
+-----------------------------------------------
