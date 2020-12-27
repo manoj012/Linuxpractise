@@ -1,4 +1,198 @@
 
+<<<<<<< HEAD
+1 create user 'dora' with home diectory
+
+[root@linux ~]# useradd dora
+[root@linux ~]# sudo passwd dora
+Changing password for user dora.
+New password:
+BAD PASSWORD: The password is shorter than 8 characters
+Retype new password:
+passwd: all authentication tokens updated successfully.
+[root@linux ~]# su dora
+[dora@linux root]$
+  
+2.create group 'cartoon'
+
+[root@linux ~]# groupadd cartoon
+[root@linux ~]# getent group | grep car*
+cartoon:x:1008:
+
+3. Add dora user to cartoon group.
+
+[root@linux ~]# sudo usermod -a -G cartoon dora
+[root@linux ~]# groups dora
+dora : dora cartoon
+
+4. Add user to the sudeors file.
+
+[root@linux ~]# usermod -aG wheel dora
+[root@linux ~]# su - dora
+Last login: Thu Dec 24 21:34:39 UTC 2020 on pts/0
+[dora@linux ~]$ sudo su
+[sudo] password for dora:
+[root@linux dora]#
+
+
+5. verify if dora user is able to use Sudo su
+
+[dora@linux ~]$ sudo su
+[sudo] password for dora:
+[root@linux dora]#
+
+--------- if not display (troubleshoot)
+
+6.Create 2 users in 2 different servers.
+
+useradd user_name
+
+7.configure the passwordless authentication between those 2 servers withing that users. 
+
+Step 1:
+
+[micky@linux3 ~]$ ssh-keygen -t rsa
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/micky/.ssh/id_rsa):
+Created directory '/home/micky/.ssh'.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/micky/.ssh/id_rsa.
+Your public key has been saved in /home/micky/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:4qxxqz5FzuemxrcwY0CkW3sfoG/zhSSpBx6/Bcfn8yY micky@linux3
+The key's randomart image is:
++---[RSA 2048]----+
+|    .            |
+|   o             |
+|  . o .          |
+|   + o.+         |
+|  . *+* S .      |
+|   . @+B.=       |
+|    +o#o+ +      |
+|    .BoX+.Eo.    |
+|   .++++o. o.    |
++----[SHA256]-----+
+
+Step 2:
+
+[micky@linux3 ~]$ ssh dora@192.168.1.1 mkdir -p .ssh
+The authenticity of host '192.168.1.1 (192.168.1.1)' can't be established.
+ECDSA key fingerprint is SHA256:LTsGCFsGrT/LjH6ECyr5eRH1R4QN5KDAQoLqj+RnmA8.
+ECDSA key fingerprint is MD5:78:c6:a6:7f:67:86:57:9a:92:eb:a9:b6:c3:ba:db:b0.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '192.168.1.1' (ECDSA) to the list of known hosts.
+dora@192.168.1.1's password:
+
+Step 3:
+
+[micky@linux3 ~]$ cat .ssh/id_rsa.pub | ssh dora@192.168.1.1 'cat >> .ssh/authorized_keys'
+dora@192.168.1.1's password:
+
+Step 4:
+
+[micky@linux3 ~]$ ssh dora@192.168.1.1 "chmod 700 .ssh; chmod 640 .ssh/authorized_keys"
+dora@192.168.1.1's password:
+
+Step 5:
+
+[micky@linux3 ~]$ ssh dora@192.168.1.1
+Last login: Fri Dec 25 23:01:08 2020
+[dora@linux ~]$
+[dora@linux ~]$
+[dora@linux ~]$ ifconfig
+docker0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        inet 172.17.0.1  netmask 255.255.0.0  broadcast 0.0.0.0
+        ether 02:42:b4:43:9b:0b  txqueuelen 0  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.0.2.15  netmask 255.255.255.0  broadcast 10.0.2.255
+        inet6 fe80::5054:ff:fe4d:77d3  prefixlen 64  scopeid 0x20<link>
+        ether 52:54:00:4d:77:d3  txqueuelen 1000  (Ethernet)
+        RX packets 7566  bytes 612416 (598.0 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 5698  bytes 547038 (534.2 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+eth1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.1  netmask 255.255.255.0  broadcast 192.168.1.255
+        inet6 fe80::a00:27ff:fea3:da50  prefixlen 64  scopeid 0x20<link>
+        ether 08:00:27:a3:da:50  txqueuelen 1000  (Ethernet)
+        RX packets 41973  bytes 4029146 (3.8 MiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 102  bytes 18558 (18.1 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 2  bytes 104 (104.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 2  bytes 104 (104.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+[dora@linux ~]$
+
+
+8.install lynx package both in ubuntu and centos 
+
+sudo yum install wget
+sudo rpm –i sample_file.rpm
+
+[dora@linux ~]$ sudo rpm -i youtube-dl-2020.12.22-1.1.noarch.rpm
+[sudo] password for dora:
+error: open of youtube-dl-2020.12.22-1.1.noarch.rpm failed: No such file or directory
+[dora@linux ~]$ sudo rpm -i httpd-2.4.46-6.fc34.aarch64.rpm
+error: open of httpd-2.4.46-6.fc34.aarch64.rpm failed: No such file or directory
+[dora@linux ~]$ sudo yum localinstall httpd-2.4.46-6.fc34.aarch64.rpm
+Loaded plugins: fastestmirror, product-id, search-disabled-repos, subscription-manager
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+Cannot open: httpd-2.4.46-6.fc34.aarch64.rpm. Skipping.
+Nothing to do
+[dora@linux ~]$
+
+
+9.command to check the 5 top pprocesses that consuming memory and cpu 
+
+[dora@linux ~]$  ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head
+  PID  PPID CMD                         %MEM %CPU
+  721     1 /usr/bin/dockerd-current --  5.3  0.0
+  720     1 /usr/bin/python2 -Es /usr/s  4.0  0.0
+  758   721 /usr/bin/docker-containerd-  2.2  0.0
+  364     1 /usr/lib/polkit-1/polkitd -  1.8  0.0
+ 1835     1 /usr/sbin/NetworkManager --  1.8  0.0
+ 5547   717 sshd: dora [priv]            1.1  0.0
+ 1850  1835 /sbin/dhclient -d -q -sf /u  1.1  0.0
+ 2609   717 sshd: vagrant [priv]         1.1  0.0
+  719     1 /usr/sbin/httpd -DFOREGROUN  1.0  0.0
+
+
+10.Install the httpd package in centos 7 and enable the service on reboot also write simple text in /var/www/html
+
+sudo yum update
+sudo yum install httpd
+sudo systemctl start httpd
+sudo systemctl enable httpd
+sudo systemctl status httpd
+
+
+11. create a folder and set the Read Only permission using Access Contl List(acl) on that folder for venum user.
+
+[root@linux3 vagrant]# mkdir test
+[root@linux3 vagrant]# ls -l
+total 0
+drwxr-xr-x. 2 root root 6 Dec 26 03:30 test
+[root@linux3 vagrant]# chmod 740 test
+[root@linux3 vagrant]# ls -l
+total 0
+drwxr-----. 2 root root 6 Dec 26 03:30 test
+=======
 
 1 create user venum with home dir 
 2. create group 'systemgroup'
@@ -15,3 +209,4 @@
 11. create a folder and set the Read Only permission using Access Contl List(acl) on that folder for venum user.
 
 -----------------------------------------------
+>>>>>>> f63c94c31d4ffef211511e16c96a37571d1066cf
